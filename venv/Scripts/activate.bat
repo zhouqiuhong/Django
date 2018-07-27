@@ -1,5 +1,5 @@
 @echo off
-set "VIRTUAL_ENV=C:\Users\周秋红\MxOnline\venv"
+set "VIRTUAL_ENV=D:\Projects\MxOnline\MxOnline\venv"
 
 if not defined PROMPT (
     set "PROMPT=$P$G"
