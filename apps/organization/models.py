@@ -23,7 +23,7 @@ class CourseOrganization(models.Model):
     fav_num = models.IntegerField(default=0, verbose_name=u"收藏人数")
     image = models.ImageField(upload_to="image/%Y/%m", verbose_name=u"封面图片", max_length=200)
     click_num = models.IntegerField(default=0, verbose_name=u"点击数")
-    city = models.ForeignKey(City, verbose_name=u"机构所在城市", on_delete=True)
+    city = models.ForeignKey(City, verbose_name=u"机构所在城市")
     add_time = models.DateTimeField(default=datetime.now, verbose_name=u"添加时间")
 
     class Meta:

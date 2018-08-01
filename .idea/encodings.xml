@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="Encoding">
-    <file url="file://C:/ProgramData/Anaconda3/Lib/site-packages/django/apps/config.py" charset="UTF-8" />
-    <file url="file://C:/ProgramData/Anaconda3/Lib/site-packages/django/core/management/__init__.py" charset="UTF-8" />
-    <file url="file://C:/ProgramData/Anaconda3/Lib/site-packages/django/db/models/base.py" charset="UTF-8" />
+  <component name="Encoding" defaultCharsetForPropertiesFiles="UTF-8">
+    <file url="file://$USER_HOME$/testvir/Lib/site-packages/django/apps/registry.py" charset="UTF-8" />
+    <file url="file://$USER_HOME$/testvir/Lib/site-packages/django/core/management/__init__.py" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/MxOnline/urls.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/README.md" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/apps/course/admin.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/apps/course/views.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/apps/operation/apps.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/apps/user/admin.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/apps/user/views.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/extra_apps/xadmin/.tx/config" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/extra_apps/xadmin/templates/xadmin/auth/password_reset/email.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/extra_apps/xadmin/views/__init__.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/manage.py" charset="UTF-8" />
+    <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>
