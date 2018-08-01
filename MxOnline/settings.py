@@ -17,6 +17,7 @@ import sys
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
+sys.path.insert(0, os.path.join(BASE_DIR, 'extra_apps'))
 #
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
@@ -43,7 +44,9 @@ INSTALLED_APPS = [
     "course",
     "organization",
     "operation",
-]
+    "xadmin",
+    "crispy_forms",
+    ]
 AUTH_USER_MODEL = 'user.UserProfile'
 
 MIDDLEWARE = [
@@ -87,7 +90,7 @@ DATABASES = {
         'HOST': 'localhost',
         'PORT': '3306',
         'USER': 'root',
-        'PASSWORD': '123456',
+        'PASSWORD': '123',
     }
 }
 
