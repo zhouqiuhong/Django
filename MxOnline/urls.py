@@ -18,7 +18,5 @@ from django.conf.urls import url
 import xadmin
 
 urlpatterns = [
-    # url('admin/', admin.site.urls),
-    url(r'^xadmin/', xadmin.site.urls),
-    # path(r'^media/(?P<path>.*)', {'document_root': MEDIA_ROOT}),
+    url('xadmin/', xadmin.site.urls),
 ]
