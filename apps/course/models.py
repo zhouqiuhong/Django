@@ -39,7 +39,7 @@ class Lesson(models.Model):
         return self.name
 
 
-class Vedio(models.Model):
+class Video(models.Model):
     lesson = models.ForeignKey(Lesson, verbose_name=u"课程")
     name = models.CharField(max_length=100, verbose_name=u"视频名称")
     add_time = models.DateTimeField(default=datetime.now)
@@ -56,7 +56,7 @@ class CourseResource(models.Model):
     course = models.ForeignKey(Course, verbose_name=u"课程名")
     name = models.CharField(max_length=100, verbose_name=u"资源名称")
     download = models.ImageField(upload_to="image/%Y/%m", verbose_name=u"资源文件", max_length=200)
-    add_time = models.DateTimeField(max_length=200, default=datetime.now)
+    add_time = models.DateTimeField(max_length=200, default=datetime.now, verbose_name=u"添加时间")
 
     class Meta:
         verbose_name = u"课程资源"

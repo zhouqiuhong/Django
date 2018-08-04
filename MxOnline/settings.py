@@ -46,8 +46,14 @@ INSTALLED_APPS = [
     "operation",
     "xadmin",
     "crispy_forms",
+    "captcha",
     ]
 AUTH_USER_MODEL = 'user.UserProfile'
+
+AUTHENCATION_BACKENS = (
+    "user.views.CustomBackend",
+)
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -132,3 +138,13 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+EMAIL_HOST = "smtp.sina.cn"
+EMAIL_PORT = 25
+EMAIL_HOST_USER = "18575682432@sina.cn"
+EMAIL_HOST_PASSWORD = "200717"
+EMAIL_USE_TLS = False
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_FROM = "<18575682432@sina.cn>"
+# DEFAULT_FROM_EMAIL = "18575682432@sina.com"
