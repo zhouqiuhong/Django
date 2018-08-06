@@ -1,14 +1,12 @@
+# -*- coding:utf-8 -*-
 from django.shortcuts import render
 
 from django.contrib.auth import authenticate, login
-# Create your views here.
 from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth.hashers import make_password
-# from django import forms
+
 from django.views.generic.base import View
-
-from .forms import LoginForm, RegisterForm, ForgetForm
-
+from .forms import LoginForm, RegisterForm, ForgetForm, ModifyPwdForm
 from django.db.models import Q
 
 from .models import UserProfile, EmailVerifyRecord
@@ -28,9 +26,9 @@ class CustomBackend(ModelBackend):
 
 class ActiveUserView(View):
     def get(self, request, active_code):
-        all_recordes = EmailVerifyRecord.objects.filter(code=active_code)
-        if all_recordes:
-            for record in all_recordes:
+        all_record = EmailVerifyRecord.objects.filter(code=active_code)
+        if all_record:
+            for record in all_record:
                 email = record.email
                 user = UserProfile.objects.get(email=email)
                 user.is_active = True
@@ -69,7 +67,7 @@ class RegisterView(View):
 class LoginView(View):
 
     def get(self, request):
-        return render(request, 'login.html', {'msg': u"用户名或密码错误"})
+        return render(request, 'login.html', {})
 
     def post(self, request):
         login_form = LoginForm(request.POST)
@@ -77,6 +75,7 @@ class LoginView(View):
             user_name = request.POST.get("username", "")
             pass_word = request.POST.get('password', "")
             user = authenticate(username=user_name, password=pass_word)
+            # print(user)
             if user is not None:
                 if user.is_active:
                     login(request, user)
@@ -86,7 +85,7 @@ class LoginView(View):
             else:
                 return render(request, 'login.html', {'msg': u"用户名或密码错误"})
         else:
-            return render(request, 'login.html', {'msg': u"用户名或密码错误", "login_form": login_form})
+            return render(request, 'login.html', {"login_form": login_form})
 
 
 class ForgetPwdView(View):
@@ -99,21 +98,43 @@ class ForgetPwdView(View):
         if forget_form.is_valid():
             email = request.POST.get("email", "")
             send_register_email(email, "forget")
-            render(request, "send_success.html")
+            return render(request, "send_success.html")
         else:
             return render(request, 'forgetpwd.html', {"forget_form": forget_form})
 
 
 class ResetView(View):
     def get(self, request, active_code):
-        all_recordes = EmailVerifyRecord.objects.filter(code=active_code)
-        if all_recordes:
-            for record in all_recordes:
+        active_code = active_code.replace("/", "")
+        all_record = EmailVerifyRecord.objects.filter(code=active_code)
+        if all_record:
+            for record in all_record:
                 email = record.email
                 return render(request, 'password_reset.html', {'email': email})
 
-        # else:
-        #     return render(request, 'active_fail.html')
-        # return render(request, 'login.html')
-        #
+        else:
+            return render(request, 'password_reset.html')
+        return render(request, 'login.html')
+
+
+class ModifyPwdView(View):
+    def post(self, request):
+        modify_form = ModifyPwdForm(request.POST)
+        if modify_form.is_valid():
+            pwd1 = request.POST.get("password1", "")
+            pwd2 = request.POST.get("password2", "")
+            email = request.POST.get("email", "")
+
+            if pwd1 != pwd2:
+                return render(request, 'password_reset.html', {'email': email, "msg": u"密码不一致"})
+            else:
+                email = request.POST.get("email", "")
+                return render(request, "login.html", {"email": email, "modify_form": modify_form})
+        else:
+            return render(request, 'password_reset.html')
+
+
+
+
+
         #
