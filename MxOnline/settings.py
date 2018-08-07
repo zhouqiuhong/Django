@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "xadmin",
     "crispy_forms",
     "captcha",
+    'pure_pagination',
     ]
 AUTH_USER_MODEL = 'user.UserProfile'
 
@@ -97,7 +98,7 @@ DATABASES = {
         'HOST': 'localhost',
         'PORT': '3306',
         'USER': 'root',
-        'PASSWORD': '123',
+        'PASSWORD': '123456',
     }
 }
 
@@ -146,5 +147,15 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 EMAIL_HOST = "smtp.sina.cn"
 EMAIL_PORT = 25
+EMAIL_USER_HOST = "18575682432@sina.cn"
+EMAIL_USER_PASSWORD = "200717"
 EMAIL_USE_TLS = False
+EMAIL_FROM = "18575682432@sina.cn"
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+PAGINATION_SETTINGS = {
+    'PAGE_RANGE_DISPLAYED': 10,
+    'MARGIN_PAGES_DISPLAYED': 2,
+
+    'SHOW_FIRST_PAGE_WHEN_INVALID': True,
+}

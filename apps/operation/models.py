@@ -21,8 +21,8 @@ class UserAsk(models.Model):
 
 
 class CourseComments(models.Model):
-    user = models.ForeignKey(UserProfile,verbose_name=u"用户名", on_delete=models.CASCADE)
-    course = models.ForeignKey(Course, verbose_name=u"课程名", on_delete=models.CASCADE)
+    user = models.ForeignKey(UserProfile, verbose_name=u"用户名", default="")
+    course = models.ForeignKey(Course, verbose_name=u"课程名", default="")
     comment = models.CharField(max_length=200, verbose_name=u"评论")
     add_time = models.DateTimeField(default=datetime.now, verbose_name=u'添加时间')
 
@@ -32,7 +32,7 @@ class CourseComments(models.Model):
 
 
 class UserFavorite(models.Model):
-    user = models.ForeignKey(UserProfile, verbose_name=u"用户名", on_delete=models.CASCADE)
+    user = models.ForeignKey(UserProfile, verbose_name=u"用户名", default="")
     fav_id = models.IntegerField(default=0, verbose_name=u"数据的id")
     fav_type = models.IntegerField(choices=(('1', '课程'), ('2', '课程机构'), ('3', '授课老师')), default=1, verbose_name=u"收藏类型")
     add_time = models.DateTimeField(default=datetime.now, verbose_name=u'添加时间')
@@ -54,8 +54,8 @@ class UserMessage(models.Model):
 
 
 class UserCourse(models.Model):
-    user = models.ForeignKey(UserProfile, verbose_name=u"用户名", on_delete=models.CASCADE)
-    course = models.ForeignKey(Course, verbose_name=u"课程名", on_delete=models.CASCADE)
+    user = models.ForeignKey(UserProfile, verbose_name=u"用户名", default="")
+    course = models.ForeignKey(Course, verbose_name=u"课程名", default="")
     add_time = models.DateTimeField(default=datetime.now, verbose_name=u'添加时间')
 
     class Meta:
