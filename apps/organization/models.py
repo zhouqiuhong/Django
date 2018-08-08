@@ -42,7 +42,7 @@ class CourseOrganization(models.Model):
 
 
 class Teacher(models.Model):
-    org = models.ForeignKey(CourseOrganization,verbose_name=u"所属机构")
+    org = models.ForeignKey(CourseOrganization, verbose_name=u"所属机构")
     name = models.CharField(max_length=20, verbose_name=u"授课老师")
     work_year = models.IntegerField(default=0, verbose_name=u"工作年限")
     work_company = models.CharField(max_length=50, verbose_name=u"所在公司")
@@ -51,6 +51,7 @@ class Teacher(models.Model):
     fav_num = models.IntegerField(default=0, verbose_name=u"收藏人数")
     click_num = models.IntegerField(default=0, verbose_name=u"点击数")
     add_time = models.DateTimeField(default=datetime.now, verbose_name=u"添加时间")
+    image = models.ImageField(upload_to="teacher/%Y/%m", verbose_name=u"头像", max_length=100, default="")
 
     class Meta:
         verbose_name = u"授课老师"

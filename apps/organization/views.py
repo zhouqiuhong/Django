@@ -6,7 +6,7 @@ from .models import CourseOrganization, City
 from django.views import View
 
 from .forms import UserAskForm
-
+from course.models import Course
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 # Create your views here.
 
@@ -61,6 +61,7 @@ class OrgView(View):
 
 
 class UserAskView(View):
+    """用户咨询"""
     def post(self, request):
         userask_form = UserAskForm(request.POST)
         if userask_form.is_valid():
@@ -69,3 +70,16 @@ class UserAskView(View):
         else:
             return HttpResponse('{"status":"fail", "msg":"添加出错了"}', content_type="application/json")
             # return HttpResponse("{'status':'fail', 'msg':{0}}".format(userask_form.errors))
+
+
+class OrgHomeView(View):
+    """机构首页"""
+    def get(self, request, org_id):
+        course_org = CourseOrganization.objects.get(id=int(org_id))
+        all_courses = course_org.course_set.all()[:3]
+        all_teachers = course_org.teacher_set.all()[:1]
+        return render(request, 'org-detail-homepage.html', {
+            "all_courses": all_courses,
+            "all_teachers": all_teachers,
+            "course_org": course_org,
+        })
