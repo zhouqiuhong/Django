@@ -49,12 +49,12 @@ INSTALLED_APPS = [
     "captcha",
     'pure_pagination',
     ]
+
 AUTH_USER_MODEL = 'user.UserProfile'
 
 AUTHENCATION_BACKENS = (
     "user.views.CustomBackend",
 )
-
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -156,6 +156,5 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 PAGINATION_SETTINGS = {
     'PAGE_RANGE_DISPLAYED': 10,
     'MARGIN_PAGES_DISPLAYED': 2,
-
     'SHOW_FIRST_PAGE_WHEN_INVALID': True,
 }
