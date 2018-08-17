@@ -5,7 +5,7 @@
 @time:2018/8/14 00148:50
 """
 from django.conf.urls import url
-from .views import CourseListView, CourseDetailView, CourseInfoView, CourseCommntView
+from .views import CourseListView, CourseDetailView, CourseInfoView, CourseCommntView, AddCommentView
 
 
 urlpatterns = [
@@ -16,4 +16,6 @@ urlpatterns = [
     url(r'^info/(?P<course_id>\d+)/$', CourseInfoView.as_view(), name="course_info"),
     #课程评论
     url(r'^comment/(?P<course_id>\d+)/$', CourseCommntView.as_view(), name="course_comment"),
+    #添加课程评论
+    url(r'^add_comment/$', AddCommentView.as_view(), name="add_comment"),
 ]
