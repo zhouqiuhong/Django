@@ -45,6 +45,8 @@ class CourseOrganization(models.Model):
 
 
 class Teacher(models.Model):
+    age = models.IntegerField(default=27, verbose_name=u"讲师年龄")
+    points = models.CharField(max_length=50, default="教学严谨", verbose_name=u"教学特点")
     org = models.ForeignKey(CourseOrganization, verbose_name=u"所属机构")
     name = models.CharField(max_length=20, verbose_name=u"授课老师")
     work_year = models.IntegerField(default=0, verbose_name=u"工作年限")

@@ -12,4 +12,5 @@ class LoginRequiredMixin(object):
 
     @method_decorator(login_required(login_url="/login/"))
     def dispatch(self, request, *args, **kwargs):
-        return super(LoginRequiredMixin, self).dispatch(self, request, *args, **kwargs)
+        #不要多传参数
+        return super(LoginRequiredMixin, self).dispatch(request, *args, **kwargs)

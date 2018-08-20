@@ -75,7 +75,7 @@
                         <ul class="video">
                             {% for video in chapter.get_course_video %}
                                 <li>
-                                <a target="_blank" href='' class="J-media-item studyvideo">1.1 {{ video.name }} ({{ video.learn_time }})
+                                <a target="_blank" href='{% url "course:video_play" video.id %}' class="J-media-item studyvideo">1.1 {{ video.name }} ({{ video.learn_time }})
                                     <i class="study-state"></i>
                                 </a>
                             </li>

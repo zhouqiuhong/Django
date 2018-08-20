@@ -5,8 +5,8 @@
 @time:2018/8/7 000718:13
 """
 from django.conf.urls import url, include
-from .views import OrgView, UserAskView, OrgHomeView, OrgCourseView, OrgDescView, OrgTeacherView, AddFavView
-
+from .views import OrgView, UserAskView, OrgHomeView, OrgCourseView, OrgDescView, OrgTeacherView, AddFavView, TeacherListView
+from .views import TeacherDetailView
 
 urlpatterns = [
     url(r"^org_list/$", OrgView.as_view(), name="org_list"),
@@ -17,4 +17,8 @@ urlpatterns = [
     url(r"^teacher/(?P<org_id>\d+)/$", OrgTeacherView.as_view(), name="org_teacher"),
     #用户收藏
     url(r"^add_fav/$", AddFavView.as_view(), name="add_fav"),
+    #讲师列表页
+    url(r"^teacher/list/$", TeacherListView.as_view(), name="teacher_list"),
+    #讲师详情页面
+    url(r"^teacher/detail/(?P<teacher_id>\d+)/$", TeacherDetailView.as_view(), name="teacher_detail"),
 ]

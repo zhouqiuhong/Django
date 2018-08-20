@@ -140,7 +140,7 @@
                                 <ul class="other-list">
                                     {% for current_recommend in related_course %}
                                     <li class="curr">
-                                        <a href="{% url 'course:course_detail' current_recommend.id%}}" target="_blank">
+                                        <a href="{% url 'course:course_detail' current_recommend.id %}" target="_blank">
                                             <img src="{{ MEDIA_URL }}{{ current_recommend.image }}" alt="{{ current_recommend.name }}">
                                             <span class="name autowrap">{{ current_recommend.name }}</span>
                                         </a>

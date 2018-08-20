@@ -3,11 +3,12 @@ from django.shortcuts import render
 # Create your views here.
 
 from django.views.generic.base import View
-from .models import Course, CourseResource
+from .models import Course, CourseResource, Video
 from pure_pagination import EmptyPage, PageNotAnInteger, Paginator
 from operation.models import UserFavorite, CourseComments, UserCourse
 from django.http import HttpResponse
 from utils.mixin_utils import LoginRequiredMixin
+
 
 class CourseListView(View):
     def get(self, request):
@@ -74,7 +75,7 @@ class CourseInfoView(LoginRequiredMixin, View):
         #查询用户是否关联了该课程
         user_courses = UserCourse.objects.filter(user=request.user, course=course)
         if not user_courses:
-            user_course = UserCourse.objects.filter(user=request.user, course=course)
+            user_course = UserCourse(user=request.user, course=course)
             user_course.save()
 
         user_courses = UserCourse.objects.filter(course=course)
@@ -82,7 +83,8 @@ class CourseInfoView(LoginRequiredMixin, View):
 
         user_ids = [user_course.user.id for user_course in user_courses]
         #获取学过该课程的所有用户
-        all_user_course = Course.objects.filter(id__in=user_ids)
+        all_user_course = UserCourse.objects.filter(user_id__in=user_ids)
+        #取出所有课程id
         course_ids = [user_course.course.id for user_course in all_user_course]
         #获取相关的课程信息
         related_course = Course.objects.filter(id__in=course_ids).order_by("-click_num")[:5]
@@ -97,7 +99,7 @@ class CourseInfoView(LoginRequiredMixin, View):
         })
 
 
-class CourseCommentView(View):
+class CourseCommentView(LoginRequiredMixin, View):
     def get(self, request, course_id):
         course = Course.objects.get(id=int(course_id))
         # comments = CourseComments.objects.all()
@@ -129,3 +131,41 @@ class AddCommentView(View):
             return HttpResponse('{"status":"success", "msg":"添加成功"}', content_type='application/json')
         else:
             return HttpResponse('{"status":"success", "msg":"添加失败"}', content_type='application/json')
+
+
+class VideoPlayView(View):
+    def get(self, request, video_id):
+        video = Video.objects.get(id=int(video_id))
+        course = video.lesson.course
+        course.students += 1
+        course.save()
+        # 查询用户是否关联了该课程
+        user_courses = UserCourse.objects.filter(user=request.user, course=course)
+        if not user_courses:
+            user_course = UserCourse(user=request.user, course=course)
+            user_course.save()
+
+        user_courses = UserCourse.objects.filter(course=course)
+
+        user_ids = [user_course.user.id for user_course in user_courses]
+        # 获取学过该课程的所有用户
+        all_user_course = UserCourse.objects.filter(user_id__in=user_ids)
+        # 取出所有课程id
+        course_ids = [user_course.course.id for user_course in all_user_course]
+        # 获取相关的课程信息
+        related_course = Course.objects.filter(id__in=course_ids).order_by("-click_num")[:5]
+
+        all_resource = CourseResource.objects.filter(course=course)
+
+        return render(request, "course-play.html", {
+            "course": course,
+            "all_resource": all_resource,
+            "related_course": related_course,
+            "video": video,
+
+        })
+
+
+# class TeacherListView(View):
+#     def get(self, request, teacher_id):
+#         pass
