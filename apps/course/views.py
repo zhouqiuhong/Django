@@ -8,12 +8,19 @@ from pure_pagination import EmptyPage, PageNotAnInteger, Paginator
 from operation.models import UserFavorite, CourseComments, UserCourse
 from django.http import HttpResponse
 from utils.mixin_utils import LoginRequiredMixin
+from django.db.models.query import Q
 
 
 class CourseListView(View):
     def get(self, request):
         all_course = Course.objects.all().order_by("-add_time")
         hot_courses = Course.objects.all().order_by("-click_num")[:3]
+        #课程搜索
+        search_keywords = request.GET.get("keywords", "")
+        if search_keywords:
+            all_course = all_course.filter(Q(name__icontains=search_keywords) | Q(desc__icontains=search_keywords) |
+                                           Q(detail__icontains=search_keywords))#icontains中i不区分大小写
+
         sort = request.GET.get("sort", "")
         if sort:
             if sort == "students":

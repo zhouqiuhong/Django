@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-
+from django.db.models import Q
 from .models import CourseOrganization, City, Teacher
 
 from django.views import View
@@ -18,6 +18,10 @@ class OrgView(View):
         # 课程机构
         all_org = CourseOrganization.objects.all()
         hot_org = all_org.order_by('-click_num')[:3]
+        #机构搜索
+        search_keywords = request.GET.get("keywords", "")
+        if search_keywords:
+            all_org = all_org.filter(Q(name__icontains=search_keywords) | Q(desc_organization__icontains=search_keywords))
         #机构数量
         org_nums = all_org.count()
         # 城市
@@ -180,6 +184,12 @@ class TeacherListView(View):
     """课程老师列表"""
     def get(self, request):
         all_teachers = Teacher.objects.all()
+        #讲师搜索
+        search_keywords = request.GET.get("keywords", "")
+        if search_keywords:
+            all_teachers = all_teachers.filter(Q(name__icontains=search_keywords) |
+                                               Q(work_company__icontains=search_keywords) |
+                                               Q(work_position__icontains=search_keywords))
         sort = request.GET.get("sort", "")
         if sort:
             if sort == "hot":
@@ -204,18 +214,11 @@ class TeacherListView(View):
         })
 
 
-
-
-
-
-
-
-
-
 class TeacherDetailView(View):
     """讲师详情页面"""
     def get(self, request, teacher_id):
         teacher = Teacher.objects.get(id=int(teacher_id))
+        current_nav = "teacher"
         all_course = Course.objects.filter(teacher=teacher)
         sorted_teacher = Teacher.objects.all().order_by("-click_num")[:3]
         has_teacher_fav = False
@@ -231,6 +234,5 @@ class TeacherDetailView(View):
             "sorted_teacher": sorted_teacher,
             "has_teacher_fav": has_teacher_fav,
             "has_org_fav": has_org_fav,
-
-
+            "current_nav": current_nav,
         })

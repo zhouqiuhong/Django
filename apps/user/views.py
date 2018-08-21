@@ -11,7 +11,7 @@ from django.db.models import Q
 
 from .models import UserProfile, EmailVerifyRecord
 from utils.email_send import send_register_email
-
+from utils.mixin_utils import LoginRequiredMixin
 
 class CustomBackend(ModelBackend):
 
@@ -78,7 +78,7 @@ class LoginView(View):
             # print(user)
             if user is not None:
                 if user.is_active:
-                    login(request, user)
+                    login(request=request, user=user)
                     return render(request, 'index.html')
                 else:
                     return render(request, 'login.html', {'msg': u"用户未激活"})
@@ -134,7 +134,8 @@ class ModifyPwdView(View):
             return render(request, 'password_reset.html')
 
 
-
-
-
-        #
+class UserInfoView(LoginRequiredMixin, View):
+    def get(self, request):
+        user = UserProfile.objects.all()
+        return render(request, "usercenter-info.html", {
+        })
