@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 {% block title %}首页- 慕学在线网{% endblock %}
+{% block custom_js %}
+<script type="text/javascript" src="/static/js/index.js"></script>
+{% endblock %}
 {% block custom_bread %}
 {% endblock %}
 {% block content %}
@@ -446,7 +449,4 @@
 			</div>
 		</div>
 </section>
-{% endblock %}
-{% block custom_js %}
-<script type="text/javascript" src="/static/js/index.js"></script>
 {% endblock %}

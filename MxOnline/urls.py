@@ -40,5 +40,5 @@ urlpatterns = [
     #配置上传文件的处理函数
     url(r"^media/(?P<path>.*/$)", serve, {"document_root": MEDIA_ROOT}),
     #用户个人信息相关配置
-    url(r'^user/', include("user.urls", namespace="user")),
+    url(r'^users/', include("user.urls", namespace="user")),
 ]
