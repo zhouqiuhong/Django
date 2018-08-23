@@ -41,7 +41,9 @@ class ModifyUserPwdForm(forms.Form):
     password2 = forms.CharField(required=True, min_length=5)
 
 
-class UpdateEmailForm(forms.Form):
-    email = forms.EmailField()
+class UserInfoForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['nick_name', 'birthday', 'address',  'gender', 'mobile']
 
 

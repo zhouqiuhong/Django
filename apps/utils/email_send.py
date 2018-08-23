@@ -28,8 +28,7 @@ def send_register_email(email, send_type="register"):
         code = random_str(4)
     else:
         code = random_str(16)
-
-    code = random_str(16)
+    # code = random_str(16)
     email_record.code = code
     email_record.email = email
     email_record.send_type = send_type

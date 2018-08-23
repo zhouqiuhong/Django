@@ -8,14 +8,16 @@ from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth.hashers import make_password
 
 from django.views.generic.base import View
-from .forms import LoginForm, RegisterForm, ForgetForm, ModifyPwdForm, UploadImageForm, ModifyUserPwdForm
+from .forms import LoginForm, RegisterForm, ForgetForm, ModifyPwdForm, UploadImageForm, ModifyUserPwdForm, UserInfoForm
 from django.db.models import Q
 
 from .models import UserProfile, EmailVerifyRecord
 from utils.email_send import send_register_email
 from utils.mixin_utils import LoginRequiredMixin
 from django.http import HttpResponse
-
+from operation.models import UserCourse, UserFavorite
+from organization.models import CourseOrganization, Teacher
+from course.models import Course
 
 class CustomBackend(ModelBackend):
 
@@ -140,9 +142,16 @@ class ModifyPwdView(View):
 
 class UserInfoView(LoginRequiredMixin, View):
     def get(self, request):
-        user = UserProfile.objects.all()
-        return render(request, "usercenter-info.html", {
-        })
+        flag_user = "user_info"
+        return render(request, "usercenter-info.html", {"flag_user": flag_user})
+
+    def post(self, request):
+        user_info_form = UserInfoForm(request.POST, instance=request.user)
+        if user_info_form.is_valid():
+            user_info_form.save()
+            return HttpResponse('{"status":"success"}', content_type="application/json")
+        else:
+            return HttpResponse(json.dumps(user_info_form.errors), content_type="application/json")
 
 
 class UploadImageView(LoginRequiredMixin, View):
@@ -173,11 +182,6 @@ class UpdatePwdView(View):
             return HttpResponse(json.dumps(modify_form.errors), content_type='application/json')
 
 
-# class UpdateEmailView(View):
-#     def post(self, request):
-#         pass
-
-
 class SendEmailCodeView(LoginRequiredMixin, View):
     def get(self, request):
         email = request.GET.get("email", "")
@@ -185,3 +189,63 @@ class SendEmailCodeView(LoginRequiredMixin, View):
             return HttpResponse('{"email":"邮件已存在"}', content_type="application/json")
         send_register_email(email, "update_email")
         return HttpResponse('{"status":"success"}', content_type="application/json")
+
+
+class UpdateEmailView(LoginRequiredMixin, View):
+    def post(self, request):
+        email = request.POST.get("email", "")
+        code = request.POST.get("code", "")
+        existed_record = EmailVerifyRecord.objects.filter(email=email, code=code, send_type="update_email")
+        if existed_record:
+            user = request.user
+            user.email = email
+            user.save()
+            return HttpResponse('{"status":"success"}', content_type="application/json")
+        else:
+            return HttpResponse('{"email":"验证码错误"}', content_type="application/json")
+
+
+class UserCourseView(LoginRequiredMixin, View):
+    def get(self, request):
+        user = request.user
+        flag_user = "my_course"
+        all_course = UserCourse.objects.filter(user=user)
+        return render(request, "usercenter-mycourse.html", {"all_course": all_course, "flag_user": flag_user})
+
+
+class MyFavOrgView(LoginRequiredMixin, View):
+    def get(self, request):
+        all_org = []
+        fav_type = 2
+        user = request.user
+        fav_orgs = UserFavorite.objects.filter(user=user, fav_type=fav_type)
+        for fav_org in fav_orgs:
+            org_id = fav_org.fav_id
+            org = CourseOrganization.objects.get(id=org_id)#此处应该使用get方法，而非filter方法
+            all_org.append(org)
+        return render(request, "usercenter-fav-org.html", {"all_org": all_org})
+
+
+class MyFavTeacherView(LoginRequiredMixin, View):
+    def get(self, request):
+        all_teacher = []
+        fav_type = 3
+        user = request.user
+        fav_flag = ""
+        fav_teachers = UserFavorite.objects.filter(user=user, fav_type=fav_type)
+        for fav_teacher in fav_teachers:
+            teacher_id = fav_teacher.fav_id
+            teacher = Teacher.objects.get(id=teacher_id)#此处应该使用get方法，而非filter方法
+            all_teacher.append(teacher)
+        return render(request, "usercenter-fav-teacher.html", {"all_teacher": all_teacher})
+
+
+class MyFavCourseView(LoginRequiredMixin, View):
+    def get(self, request):
+        all_course = []
+        fav_courses = UserFavorite.objects.filter(user=request.user, fav_type=1)
+        for fav_course in fav_courses:
+            course_id = fav_course.fav_id
+            course = Course.objects.filter(id=course_id)
+            all_course.append(course)
+        return render(request, "usercenter-fav-course.html", {"all_course": all_course})
