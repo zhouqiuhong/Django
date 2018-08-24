@@ -79,6 +79,8 @@ class CourseDetailView(View):
 class CourseInfoView(LoginRequiredMixin, View):
     def get(self, request, course_id):
         course = Course.objects.get(id=int(course_id))
+        course.students += 1
+        course.save()
         #查询用户是否关联了该课程
         user_courses = UserCourse.objects.filter(user=request.user, course=course)
         if not user_courses:
@@ -86,8 +88,6 @@ class CourseInfoView(LoginRequiredMixin, View):
             user_course.save()
 
         user_courses = UserCourse.objects.filter(course=course)
-
-
         user_ids = [user_course.user.id for user_course in user_courses]
         #获取学过该课程的所有用户
         all_user_course = UserCourse.objects.filter(user_id__in=user_ids)
@@ -95,9 +95,7 @@ class CourseInfoView(LoginRequiredMixin, View):
         course_ids = [user_course.course.id for user_course in all_user_course]
         #获取相关的课程信息
         related_course = Course.objects.filter(id__in=course_ids).order_by("-click_num")[:5]
-
         all_resource = CourseResource.objects.filter(course=course)
-
         return render(request, "course-video.html", {
             "course": course,
             "all_resource": all_resource,

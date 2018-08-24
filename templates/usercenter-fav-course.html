@@ -5,8 +5,8 @@
 <section>
         <div class="wp">
             <ul  class="crumbs">
-                <li><a href="index.html">首页</a>></li>
-                <li><a href="/user/home/">个人中心</a>></li>
+                <li><a href="{% url 'index' %}">首页</a>></li>
+                <li><a href="{% url 'user:user_info' %}">个人中心</a>></li>
                 <li>我的收藏</li>
             </ul>
         </div>
@@ -31,8 +31,8 @@
                 <div class="companycenter">
                     <div class="group_list brief">
                         {% for fav_course in all_course %}
-                             <div class="module1_5 box">
-                                <a href="{% url 'course:course_detail' fav_course.id %}">
+                        <div class="module1_5 box">
+                                <a href="">
                                     <img width="214" height="190" src="{{ MEDIA_URL }}{{ fav_course.image }}"/>
                                 </a>
                                 <div class="des">
@@ -42,7 +42,7 @@
                                 </div>
                                 <div class="bottom">
                                     <span class="fl">{{ fav_course.course_org.name }}</span>
-                                    <span class="delete-group fr jsDeleteFav_course" data-favid="12"></span>
+                                    <span class="delete-group fr jsDeleteFav_course" data-favid="{{ fav_course.id }}"></span>
                                 </div>
                             </div>
                         {% endfor %}

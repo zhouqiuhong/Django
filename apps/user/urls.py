@@ -6,7 +6,9 @@
 """
 from django.conf.urls import url, include
 from .views import UserInfoView, UploadImageView, UpdatePwdView, SendEmailCodeView, UpdateEmailView, UserCourseView
-from .views import MyFavOrgView, MyFavTeacherView, MyFavCourseView
+from .views import MyFavOrgView, MyFavTeacherView, MyFavCourseView, MyMessageView
+
+
 urlpatterns = [
     url(r'^info/$', UserInfoView.as_view(), name="user_info"),
     #用户上传头像
@@ -27,6 +29,10 @@ urlpatterns = [
 
     #收藏讲师
     url(r'^myfav/teacher/$', MyFavTeacherView.as_view(), name="myfav_teacher"),
+
+    #我的消息
+    url(r'^mymessage/$', MyMessageView.as_view(), name="mymessage"),
+
 
 
 ]

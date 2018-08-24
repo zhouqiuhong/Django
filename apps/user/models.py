@@ -3,7 +3,7 @@ from datetime import datetime
 
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-
+# from operation.models import UserMessage
 # Create your models here.
 
 
@@ -21,6 +21,11 @@ class UserProfile(AbstractUser):
 
     def __str__(self):
         return self.username
+
+        # 获取未读消息的数量
+    def get_unread_num(self):
+        from operation.models import UserMessage
+        return UserMessage.objects.filter(user=self.id, has_read=False).count()
 
 
 class EmailVerifyRecord(models.Model):

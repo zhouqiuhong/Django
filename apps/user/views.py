@@ -3,7 +3,7 @@ import json
 
 from django.shortcuts import render
 
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth.hashers import make_password
 
@@ -14,10 +14,12 @@ from django.db.models import Q
 from .models import UserProfile, EmailVerifyRecord
 from utils.email_send import send_register_email
 from utils.mixin_utils import LoginRequiredMixin
-from django.http import HttpResponse
-from operation.models import UserCourse, UserFavorite
+from django.http import HttpResponse, HttpResponseRedirect
+from operation.models import UserCourse, UserFavorite, UserMessage
 from organization.models import CourseOrganization, Teacher
 from course.models import Course
+from pure_pagination import EmptyPage, PageNotAnInteger, Paginator
+
 
 class CustomBackend(ModelBackend):
 
@@ -45,6 +47,7 @@ class ActiveUserView(View):
 
 
 class RegisterView(View):
+    """用户注册"""
     def get(self, request):
         register_form = RegisterForm()
         return render(request, 'register.html', {'register_form': register_form})
@@ -64,13 +67,27 @@ class RegisterView(View):
             user_profile.password = make_password(pass_word)
             user_profile.save()
 
+            #写入欢迎注册消息
+            user_message = UserMessage()
+            user_message.user = user_profile.id
+            user_message.message = "欢迎注册慕学在线网"
+            user_message.save()
             send_register_email(user_name, "register")
             return render(request, 'login.html')
         else:
             return render(request, 'register.html', {'register_form': register_form})
 
 
+class LogoutView(View):
+    """用户登出"""
+    def get(self, request):
+        logout(request)
+        from django.core.urlresolvers import reverse
+        return HttpResponseRedirect(reverse("index"))
+
+
 class LoginView(View):
+    """用户登录"""
 
     def get(self, request):
         return render(request, 'login.html', {})
@@ -246,6 +263,28 @@ class MyFavCourseView(LoginRequiredMixin, View):
         fav_courses = UserFavorite.objects.filter(user=request.user, fav_type=1)
         for fav_course in fav_courses:
             course_id = fav_course.fav_id
-            course = Course.objects.filter(id=course_id)
+            course = Course.objects.get(id=course_id)#get方法而非filter方法
             all_course.append(course)
         return render(request, "usercenter-fav-course.html", {"all_course": all_course})
+
+
+class MyMessageView(LoginRequiredMixin, View):
+    def get(self, request):
+        all_message = UserMessage.objects.filter(user=request.user.id)
+        all_unread_message = UserMessage.objects.filter(user=request.user.id, has_read=False)
+
+        #用户进入个人中心后清空未读消息记录
+        for unread_message in all_unread_message:
+            unread_message.has_read = True
+            unread_message.save()
+        try:
+            page = request.GET.get('page', 1)
+        except PageNotAnInteger:
+            page = 1
+
+        p = Paginator(all_message, per_page=5, request=request)
+
+        messages = p.page(page)
+        return render(request, "usercenter-message.html", {"messages": messages})
+
+
