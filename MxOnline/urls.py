@@ -21,13 +21,13 @@ from django.views.static import serve
 
 import xadmin
 from user.views import LoginView, RegisterView, ActiveUserView, ForgetPwdView, ResetView, ModifyPwdView
-from user.views import LogoutView
+from user.views import LogoutView, IndexView, page_not_found
 
-from MxOnline.settings import MEDIA_ROOT
+from MxOnline.settings import MEDIA_ROOT, STATIC_ROOT
 
 urlpatterns = [
     url('^xadmin/', xadmin.site.urls),
-    url('^$', TemplateView.as_view(template_name="index.html"), name="index"),
+    url('^$', IndexView.as_view(), name="index"),
     url('^login/$', LoginView.as_view(), name="login"),
     #退出登录
     url('^logout/$', LogoutView.as_view(), name="logout"),
@@ -43,6 +43,12 @@ urlpatterns = [
     url(r'^course/', include("course.urls", namespace="course")),
     #配置上传文件的处理函数
     url(r"^media/(?P<path>.*/$)", serve, {"document_root": MEDIA_ROOT}),
+    #生产环境下静态文件的处理
+    url(r"^static/(?P<path>.*/$)", serve, {"document_root": STATIC_ROOT}),
     #用户个人信息相关配置
     url(r'^users/', include("user.urls", namespace="user")),
 ]
+#全局404页面配置
+hander404 = "user.views.page_not_found"
+#全局500页面配置
+hander500 = "user.views.page_error"

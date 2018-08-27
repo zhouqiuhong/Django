@@ -22,6 +22,7 @@ class City(models.Model):
 class CourseOrganization(models.Model):
     name = models.CharField(max_length=50, verbose_name=u"机构名称")
     desc_organization = models.TextField(verbose_name=u"机构描述")
+    tag = models.CharField(max_length=10, verbose_name=u"机构标签", default="全国知名")
     location = models.CharField(max_length=150, verbose_name=u"机构地址")
     category = models.CharField(default="pxjg", verbose_name=u"机构类别", max_length=20, choices=(("pxjg", "培训机构"), ("gx", "高校"), ("gr", "个人")))
     fav_num = models.IntegerField(default=0, verbose_name=u"收藏人数")

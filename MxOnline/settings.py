@@ -26,9 +26,9 @@ sys.path.insert(0, os.path.join(BASE_DIR, 'extra_apps'))
 SECRET_KEY = 'or2no^aheeqb+^3z3f316e7=5zxapxm1br+)39epvahfqmr8^x'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*", ]
 
 
 # Application definition
@@ -145,12 +145,14 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 EMAIL_HOST = "smtp.sina.cn"
 EMAIL_PORT = 25
-EMAIL_USER_HOST = "18575682432@sina.cn"
-EMAIL_USER_PASSWORD = "200717"
+EMAIL_USER_HOST = "12345678901@sina.cn"
+EMAIL_USER_PASSWORD = "123456"
 EMAIL_USE_TLS = False
-EMAIL_FROM = "18575682432@sina.cn"
+EMAIL_FROM = "12345678901@sina.cn"
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 PAGINATION_SETTINGS = {
@@ -158,3 +160,5 @@ PAGINATION_SETTINGS = {
     'MARGIN_PAGES_DISPLAYED': 2,
     'SHOW_FIRST_PAGE_WHEN_INVALID': True,
 }
+
+# APPEND_SLASH = False#

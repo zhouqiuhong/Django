@@ -52,6 +52,8 @@ class OrgView(View):
         p = Paginator(all_org, per_page=5, request=request)
 
         orgs = p.page(page)
+        # for org in orgs:
+        #     print(org.image)
 
         return render(request, "org-list.html", {
             "all_org": orgs,
