@@ -22,8 +22,8 @@ from course.models import Course
 from pure_pagination import EmptyPage, PageNotAnInteger, Paginator
 from .models import Banner
 
-class CustomBackend(ModelBackend):
 
+class CustomBackend(ModelBackend):
     def authenticate(self, request, username=None, password=None, **kwargs):
         try:
             user = UserProfile.objects.get(Q(username=username) | Q(email=username), Q(password=password))

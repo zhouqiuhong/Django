@@ -6,10 +6,13 @@
 """
 import xadmin
 from xadmin import views
-
+from xadmin.plugins.auth import UserAdmin
 from .models import EmailVerifyRecord
-from .models import Banner
+from .models import Banner, UserProfile
 
+
+class UserProfileAdmin(UserAdmin):
+    pass
 
 class BaseSetting(object):
     enable_themes = True
@@ -37,5 +40,6 @@ class BannerAdmin(object):
 
 xadmin.site.register(EmailVerifyRecord, EmailVerifyRecordAdmin)
 xadmin.site.register(Banner, BannerAdmin)
+# xadmin.site.register(UserProfile, UserProfileAdmin)
 xadmin.site.register(views.BaseAdminView, BaseSetting)#设置主题
 xadmin.site.register(views.CommAdminView, GlobalSettings)#设置网站名

@@ -26,7 +26,7 @@ sys.path.insert(0, os.path.join(BASE_DIR, 'extra_apps'))
 SECRET_KEY = 'or2no^aheeqb+^3z3f316e7=5zxapxm1br+)39epvahfqmr8^x'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["*", ]
 
@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "crispy_forms",
     "captcha",
     'pure_pagination',
+    # "DjangoUeditor",
     ]
 
 AUTH_USER_MODEL = 'user.UserProfile'
@@ -140,13 +141,15 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+#开发环境下的静态文件的路径
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
+#生产环境下静态文件的路径
+#STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 EMAIL_HOST = "smtp.sina.cn"
 EMAIL_PORT = 25
 EMAIL_USER_HOST = "12345678901@sina.cn"

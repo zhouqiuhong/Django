@@ -23,7 +23,7 @@ import xadmin
 from user.views import LoginView, RegisterView, ActiveUserView, ForgetPwdView, ResetView, ModifyPwdView
 from user.views import LogoutView, IndexView, page_not_found
 
-from MxOnline.settings import MEDIA_ROOT, STATIC_ROOT
+from MxOnline.settings import MEDIA_ROOT
 
 urlpatterns = [
     url('^xadmin/', xadmin.site.urls),
@@ -44,9 +44,11 @@ urlpatterns = [
     #配置上传文件的处理函数
     url(r"^media/(?P<path>.*/$)", serve, {"document_root": MEDIA_ROOT}),
     #生产环境下静态文件的处理
-    url(r"^static/(?P<path>.*/$)", serve, {"document_root": STATIC_ROOT}),
+    #url(r"^static/(?P<path>.*/$)", serve, {"document_root": STATIC_ROOT}),
     #用户个人信息相关配置
     url(r'^users/', include("user.urls", namespace="user")),
+    #
+    #url(r'^ueditor/', include('DjangoUeditor.urls' )),
 ]
 #全局404页面配置
 hander404 = "user.views.page_not_found"
